@@ -13,7 +13,7 @@ PC が「重い」「遅い」「不安定」といったときに、AI と日�
 - Windows 実機での動作検証は限定的です。不具合はフィードバックにお寄せください。
 - 自動起動は初期値オフ。外部AIはユーザーが設定した場合のみ通信します。
 
-**ダウンロードの確認**: SHA256 `aab19bfc76db7f116846f67c582c6efd133321922c54e72d7107ad4ad46f3ea1`（ZIP）。ZIP内の SHA256SUMS.txt で各ファイルも確認できます。
+**ダウンロードの確認**: SHA256 `497f18f78780de974107dc2ddcdea06f6c50684c7cc6c7552ad080e0f5c8a255`（ZIP）。ZIP内の SHA256SUMS.txt で各ファイルも確認できます。
 
 **使い方**: ZIP を展開 → `Setup.exe`（インストール）または `Portable\RiiIntelligence.exe`（ポータブル）。
 

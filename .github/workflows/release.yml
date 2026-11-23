@@ -1,26 +1,36 @@
 name: release
 on:
   push:
+    branches: [main]
     paths: ['VERSION']
   workflow_dispatch:
 permissions:
   contents: write
+concurrency:
+  group: release
+  cancel-in-progress: false
 jobs:
   release:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
       - name: Assemble and publish
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          set -e
-          VER=$(sed -n 1p VERSION); SHA=$(sed -n 2p VERSION)
-          F=RiiIntelligence-$VER-win-x64.zip
-          cat parts/$F.part* > $F
+          set -euo pipefail
+          VER="$(sed -n 1p VERSION | tr -d '\r')"; SHA="$(sed -n 2p VERSION | tr -d '\r')"
+          [[ "$VER" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "bad version"; exit 1; }
+          [[ "$SHA" =~ ^[0-9a-f]{64}$ ]] || { echo "bad sha256"; exit 1; }
+          F="RiiIntelligence-$VER-win-x64.zip"
+          cat "parts/$F".part* > "$F"
           echo "$SHA  $F" | sha256sum -c -
-          if gh release view $VER >/dev/null 2>&1; then
-            gh release upload $VER $F --clobber
+          if gh release view "$VER" >/dev/null 2>&1; then
+            gh release upload "$VER" "$F" --clobber
+            gh release edit "$VER" --notes-file "RELEASE_NOTES_$VER.md"
           else
-            gh release create $VER $F --title "Rii Intelligence $VER（体験版）" --notes-file RELEASE_NOTES_$VER.md --latest
+            gh release create "$VER" "$F" --title "Rii Intelligence $VER（体験版）" --notes-file "RELEASE_NOTES_$VER.md" --latest
           fi
