@@ -1,0 +1,26 @@
+name: release
+on:
+  push:
+    paths: ['parts/**', 'RELEASE_NOTES_*.md']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assemble and publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          VER=v3.1.0
+          F=RiiIntelligence-$VER-win-x64.zip
+          cat parts/$F.part* > $F
+          echo "aab19bfc76db7f116846f67c582c6efd133321922c54e72d7107ad4ad46f3ea1  $F" | sha256sum -c -
+          if gh release view $VER >/dev/null 2>&1; then
+            gh release upload $VER $F --clobber
+          else
+            gh release create $VER $F --title "Rii Intelligence $VER（体験版）" --notes-file RELEASE_NOTES_$VER.md --latest
+          fi
