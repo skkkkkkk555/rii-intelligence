@@ -5,3 +5,5 @@ Rii（RiiOS）プロジェクトの Windows 向け AI PC 分析・最適化ア�
 - ダウンロード: [Releases](../../releases/latest)
 - ⚠ 実験的ソフトウェアです。VM または検証専用PCでの利用を推奨します。利用は自己責任でお願いします。
 - フィードバック・不具合報告: Rii Discord サーバーのフィードバックチャンネル
+
+<!-- 配布手順（Hark）: parts/ に RiiIntelligence-<ver>-win-x64.zip.partNN（90MB 分割）と RELEASE_NOTES_<ver>.md を置き、最後に VERSION（1行目=版、2行目=ZIPのSHA256）を更新して push すると Actions がリリースを作る。 -->
